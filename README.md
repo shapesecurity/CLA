@@ -1,6 +1,6 @@
 # Instructions
 
-Submit a pull request to CONTRIBUTORS.md with your full name and email address in order to confirm your agreement with the Apache 2.0 CLA below.
+Submit a pull request to this repository adding your full name and contact email to [CONTRIBUTORS.csv](https://github.com/shapesecurity/CLA/blob/master/CONTRIBUTORS.csv) in order to confirm your agreement with the Apache 2.0 CLA below.
 
 
 # Individual Contributor License Agreement
