@@ -3,7 +3,7 @@
 CLA_CSV_URL="https://raw.githubusercontent.com/shapesecurity/CLA/master/CONTRIBUTORS.csv"
 CLA_URL="https://github.com/shapesecurity/CLA"
 
-COMMITTERS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | uniq`)
+COMMITTERS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort | uniq`)
 
 echo "Committers in this range: ${COMMITTERS[@]}"
 echo
