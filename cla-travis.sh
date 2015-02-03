@@ -22,7 +22,7 @@ for item in ${COMMITTERS[@]}; do
   fi
 done
 
-if [ ${#result[@]} > 0 ]; then
+if [ ${#result[@]} -gt 0 ]; then
   echo
   echo "Committers found who have not added their name to $CLA_CSV_URL"
   echo "Please submit a PR to the CLA located at $CLA_URL"
