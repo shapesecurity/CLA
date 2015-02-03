@@ -12,11 +12,7 @@ CONTRIBUTORS=(`curl $CLA_CSV_URL 2>/dev/null | awk -F, '/,/{gsub(/ /, "", $0); p
 
 l2=" ${CONTRIBUTORS[*]} "
 for item in ${COMMITTERS[@]}; do
-  CONTRIBUTOR=false
-  if [[ $l2 =~ " $item " ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if !($CONTRIBUTOR); then
+  if [[ ! "$l2" =~ " $item " -a "$item" != *"@shapesecurity.com" ]] ; then
     echo $item has not signed the CLA
     result+=($item)
   fi
