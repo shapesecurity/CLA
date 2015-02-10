@@ -3,7 +3,7 @@
 CLA_CSV_URL="https://raw.githubusercontent.com/shapesecurity/CLA/master/CONTRIBUTORS.csv"
 CLA_URL="https://github.com/shapesecurity/CLA"
 
-COMMITTERS=(`git log --pretty=format:"%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
+COMMITTERS=(`git log --pretty=format:"%ae%n%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
 
 echo "Committers in this range: ${COMMITTERS[@]}"
 echo
@@ -28,4 +28,3 @@ if [ ${#result[@]} -gt 0 ]; then
   echo "Please submit a PR to the CLA located at $CLA_URL"
   exit 1
 fi
-
