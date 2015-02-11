@@ -24,7 +24,10 @@ done
 
 if [ ${#result[@]} -gt 0 ]; then
   echo
-  echo "Committers found who have not added their name to $CLA_CSV_URL"
+  echo "ERROR: Committers found who have not added their name to $CLA_CSV_URL"
   echo "Please submit a PR to the CLA located at $CLA_URL"
+  echo
+  echo "Debug info:"
+  git log -1 --format="Commit: %H%nParents: %P%nSubject: %s%nAuthor: %an <%ae>%nAuthor Date: %ad%nCommitter: %cn <%ce>%nCommitter Date: %cd"
   exit 1
 fi
