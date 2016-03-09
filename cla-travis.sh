@@ -8,7 +8,7 @@ else
   CSV_DATA=(`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`)
 fi
 
-COMMITTERS=(`git log --pretty=format:"%ae%n%ce" "$TRAVIS_COMMIT_RANGE" | sort -u`)
+COMMITTERS=(`git log --pretty=format:"%ae%n%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
 
 echo "Committers in this range: ${COMMITTERS[@]}"
 echo
