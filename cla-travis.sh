@@ -5,7 +5,7 @@ CLA_URL="https://github.com/shapesecurity/CLA"
 if [ $# -gt 0 ]; then
   CSV_DATA=`cat "$1" | tail -n +2`
 else
-  CSV_DATA=(`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`)
+  CSV_DATA=`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`
 fi
 
 COMMITTERS=(`git log --pretty=format:"%ae%n%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
