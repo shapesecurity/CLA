@@ -1,10 +1,11 @@
 #!/bin/bash
 
-CLA_CSV_URL="https://raw.githubusercontent.com/shapesecurity/CLA/master/CONTRIBUTORS.csv"
 CLA_URL="https://github.com/shapesecurity/CLA"
 if [ $# -gt 0 ]; then
+  CLA_CSV_URL="$1"
   CSV_DATA=`cat "$1" | tail -n +2`
 else
+  CLA_CSV_URL="https://raw.githubusercontent.com/shapesecurity/CLA/master/CONTRIBUTORS.csv"
   CSV_DATA=`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`
 fi
 
