@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ "$TRAVIS_PULL_REQUEST" == false ] && exit 0
+
 CLA_URL="https://github.com/shapesecurity/CLA"
 if [ $# -gt 0 ]; then
   CLA_CSV_URL="$1"
