@@ -24,6 +24,9 @@ CONTRIBUTORS=(`echo "$CSV_DATA" | awk -F, '/,/{gsub(/ /, "", $0); print $2 "@use
 l2=" ${CONTRIBUTORS[*]} "
 for item in ${COMMITTERS[@]}; do
   CONTRIBUTOR=false
+  if [[ "$item" == *"@shapesecurity.com" ]] ; then
+    CONTRIBUTOR=true
+  fi
   if [[ "$l2" =~ " $item " ]] ; then
     CONTRIBUTOR=true
   fi
