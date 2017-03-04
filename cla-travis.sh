@@ -12,54 +12,48 @@ else
   CSV_DATA=`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`
 fi
 
+echo "CLA_CSV_URL: $CLA_CSV_URL"
 echo "TRAVIS_COMMIT_RANGE: $TRAVIS_COMMIT_RANGE"
-
-AUTHORS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort -u`)
-COMMITTERS=(`git log --pretty=format:"%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
-
-echo "Committers in this range: ${COMMITTERS[@]}"
 echo
 
 CONTRIBUTORS=(`echo "$CSV_DATA" | awk -F, '/,/{gsub(/ /, "", $0); print $2 "@users.noreply.github.com"; print $4}'`)
 CONTRIBUTORS=" ${CONTRIBUTORS[*]} "
 
+
+AUTHORS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort -u`)
+echo "Authors in this range: ${AUTHORS[@]}"
+
 for item in ${AUTHORS[@]}; do
-  CONTRIBUTOR=false
-  if [[ "$item" == *"@shapesecurity.com" ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if [[ "$CONTRIBUTORS" =~ " $item " ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if !($CONTRIBUTOR); then
-    echo "Author $item has not signed the CLA"
+  if [[ ! ("$item" == *"@shapesecurity.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
+    echo
+    echo "ERROR: Author $item has not signed the CLA"
+    echo
     result+=($item)
   fi
 done
+
+
+COMMITTERS=(`git log --pretty=format:"%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
+echo "Committers in this range: ${COMMITTERS[@]}"
 
 for item in ${COMMITTERS[@]}; do
-  CONTRIBUTOR=false
-  if [[ "$item" == *"@shapesecurity.com" ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if [[ "$item" == "noreply@github.com" ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if [[ "$CONTRIBUTORS" =~ " $item " ]] ; then
-    CONTRIBUTOR=true
-  fi
-  if !($CONTRIBUTOR); then
-    echo "Committer $item has not signed the CLA"
+  if [[ ! ("$item" == "noreply@github.com" || "$item" == *"@shapesecurity.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
+    echo
+    echo "ERROR: Committer $item has not signed the CLA"
+    echo
     result+=($item)
   fi
 done
 
+
+echo
+
 if [ ${#result[@]} -gt 0 ]; then
-  echo
-  echo "ERROR: Committers found who have not added their name to $CLA_CSV_URL"
   echo "Please submit a PR to the CLA located at $CLA_URL"
   echo
   echo "Debug info:"
   git log -1 --format="Commit: %H%nParents: %P%nSubject: %s%nAuthor: %an <%ae>%nAuthor Date: %ad%nCommitter: %cn <%ce>%nCommitter Date: %cd"
   exit 1
 fi
+
+echo "CLA check succeeded"
