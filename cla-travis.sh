@@ -14,24 +14,42 @@ fi
 
 echo "TRAVIS_COMMIT_RANGE: $TRAVIS_COMMIT_RANGE"
 
-COMMITTERS=(`git log --pretty=format:"%ae%n%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
+AUTHORS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort -u`)
+COMMITTERS=(`git log --pretty=format:"%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
 
 echo "Committers in this range: ${COMMITTERS[@]}"
 echo
 
 CONTRIBUTORS=(`echo "$CSV_DATA" | awk -F, '/,/{gsub(/ /, "", $0); print $2 "@users.noreply.github.com"; print $4}'`)
+CONTRIBUTORS=" ${CONTRIBUTORS[*]} "
 
-l2=" ${CONTRIBUTORS[*]} "
+for item in ${AUTHORS[@]}; do
+  CONTRIBUTOR=false
+  if [[ "$item" == *"@shapesecurity.com" ]] ; then
+    CONTRIBUTOR=true
+  fi
+  if [[ "$CONTRIBUTORS" =~ " $item " ]] ; then
+    CONTRIBUTOR=true
+  fi
+  if !($CONTRIBUTOR); then
+    echo "Author $item has not signed the CLA"
+    result+=($item)
+  fi
+done
+
 for item in ${COMMITTERS[@]}; do
   CONTRIBUTOR=false
   if [[ "$item" == *"@shapesecurity.com" ]] ; then
     CONTRIBUTOR=true
   fi
-  if [[ "$l2" =~ " $item " ]] ; then
+  if [[ "$item" == "noreply@github.com" ]] ; then
+    CONTRIBUTOR=true
+  fi
+  if [[ "$CONTRIBUTORS" =~ " $item " ]] ; then
     CONTRIBUTOR=true
   fi
   if !($CONTRIBUTOR); then
-    echo $item has not signed the CLA
+    echo "Committer $item has not signed the CLA"
     result+=($item)
   fi
 done
