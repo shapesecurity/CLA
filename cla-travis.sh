@@ -24,7 +24,7 @@ AUTHORS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort -u`)
 echo "Authors in this range: ${AUTHORS[@]}"
 
 for item in ${AUTHORS[@]}; do
-  if [[ ! ("$item" == *"@shapesecurity.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
+  if [[ ! ("$item" == *"@shapesecurity.com" || "$item" == *"+dependabot[bot]@users.noreply.github.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
     echo
     echo "ERROR: Author $item has not signed the CLA"
     echo
