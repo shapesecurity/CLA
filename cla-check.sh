@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-[ "$TRAVIS_PULL_REQUEST" == false ] && exit 0
-
 CLA_URL="https://github.com/shapesecurity/CLA"
 if [ $# -gt 0 ]; then
   CLA_CSV_URL="$1"
@@ -12,15 +10,20 @@ else
   CSV_DATA=`curl "$CLA_CSV_URL" 2>/dev/null | tail -n +2`
 fi
 
+if [ -z "$COMMIT_RANGE" ]; then
+  echo "COMMIT_RANGE must be provided"
+  exit 1
+fi
+
 echo "CLA_CSV_URL: $CLA_CSV_URL"
-echo "TRAVIS_COMMIT_RANGE: $TRAVIS_COMMIT_RANGE"
+echo "COMMIT_RANGE: $COMMIT_RANGE"
 echo
 
 CONTRIBUTORS=(`echo "$CSV_DATA" | awk -F, '/,/{gsub(/ /, "", $0); print $2 "@users.noreply.github.com"; print $4}'`)
 CONTRIBUTORS=" ${CONTRIBUTORS[*]} "
 
 
-AUTHORS=(`git log --pretty=format:"%ae" $TRAVIS_COMMIT_RANGE | sort -u`)
+AUTHORS=(`git log --pretty=format:"%ae" $COMMIT_RANGE | sort -u`)
 echo "Authors in this range: ${AUTHORS[@]}"
 
 for item in ${AUTHORS[@]}; do
@@ -33,7 +36,7 @@ for item in ${AUTHORS[@]}; do
 done
 
 
-COMMITTERS=(`git log --pretty=format:"%ce" $TRAVIS_COMMIT_RANGE | sort -u`)
+COMMITTERS=(`git log --pretty=format:"%ce" $COMMIT_RANGE | sort -u`)
 echo "Committers in this range: ${COMMITTERS[@]}"
 
 for item in ${COMMITTERS[@]}; do
