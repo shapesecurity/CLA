@@ -27,7 +27,7 @@ AUTHORS=(`git log --pretty=format:"%ae" $COMMIT_RANGE | sort -u`)
 echo "Authors in this range: ${AUTHORS[@]}"
 
 for item in ${AUTHORS[@]}; do
-  if [[ ! ("$item" == *"@shapesecurity.com" || "$item" == *"+dependabot[bot]@users.noreply.github.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
+  if [[ ! ("$item" == *"@shapesecurity.com" || "$item" == *"@f5.com" || "$item" == *"+dependabot[bot]@users.noreply.github.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
     echo
     echo "ERROR: Author $item has not signed the CLA"
     echo
@@ -40,7 +40,7 @@ COMMITTERS=(`git log --pretty=format:"%ce" $COMMIT_RANGE | sort -u`)
 echo "Committers in this range: ${COMMITTERS[@]}"
 
 for item in ${COMMITTERS[@]}; do
-  if [[ ! ("$item" == "noreply@github.com" || "$item" == *"@shapesecurity.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
+  if [[ ! ("$item" == "noreply@github.com" || "$item" == *"@shapesecurity.com" || "$item" == *"@f5.com" || "$CONTRIBUTORS" =~ " $item ") ]]; then
     echo
     echo "ERROR: Committer $item has not signed the CLA"
     echo
