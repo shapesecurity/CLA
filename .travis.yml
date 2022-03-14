@@ -1,3 +1,0 @@
-sudo: false
-script:
-  - ./cla-travis.sh CONTRIBUTORS.csv
